@@ -1,0 +1,12 @@
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\bin\Debug\net6.0\Dominio.deps.json
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\bin\Debug\net6.0\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\bin\Debug\net6.0\Dominio.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.csproj.AssemblyReference.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.GeneratedMSBuildEditorConfig.editorconfig
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.AssemblyInfoInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.AssemblyInfo.cs
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.csproj.CoreCompileInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\refint\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\Dominio.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Dominio\obj\Debug\net6.0\ref\Dominio.dll
