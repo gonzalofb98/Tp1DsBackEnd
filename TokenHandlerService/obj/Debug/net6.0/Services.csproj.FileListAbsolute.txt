@@ -1,0 +1,34 @@
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.deps.json
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.AssemblyReference.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.AssemblyInfoInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.AssemblyInfo.cs
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.CoreCompileInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\refint\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\ref\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dto.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dominio.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dto.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.CopyComplete
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.deps.json
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Services.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dto.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dominio.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\bin\Debug\net6.0\Dto.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.AssemblyReference.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.AssemblyInfoInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.AssemblyInfo.cs
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.CoreCompileInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.csproj.CopyComplete
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\refint\Services.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\Services.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\TokenHandlerService\obj\Debug\net6.0\ref\Services.dll

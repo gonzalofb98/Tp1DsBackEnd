@@ -1,15 +1,13 @@
 ﻿using Dominio.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Datos
 {
-    public class ControlCalidadContexto: DbContext
-    {
+    public class ControlCalidadContexto: IdentityDbContext<Usuario>
+        {
         public ControlCalidadContexto()
         {
 
@@ -19,48 +17,68 @@ namespace Datos
         {
 
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .Entity<Color>()
-                .ToTable("Colores");
-
-            modelBuilder
                 .Entity<Defecto>()
-                .ToTable("Defectos");
+                .ToTable("Defectos")
+                .HasKey(m => m.Id);
 
             modelBuilder
-                .Entity<Empleado>()
-                .ToTable("Empleados");
+                .Entity<Color>()
+                .ToTable("Colores")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<Incidencia>()
-                .ToTable("Incidencias");
+                .ToTable("Incidencias")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<JornadaLaboral>()
-                .ToTable("JornadasLaborales");
+                .ToTable("JornadasLaborales")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<LineaDeTrabajo>()
-                .ToTable("LineasDeTrabajo");
+                .ToTable("LineasDeTrabajo")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<Modelo>()
-                .ToTable("Modelos");
+                .ToTable("Modelos")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<OrdenDeProduccion>()
-                .ToTable("OrdenesDeProduccion");
+                .ToTable("OrdenesDeProduccion")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<Alerta>()
-                .ToTable("Alertas");
+                .ToTable("Alertas")
+                .HasKey(m => m.Id);
 
             modelBuilder
                 .Entity<Turno>()
-                .ToTable("Turnos");
+                .ToTable("Turnos")
+                .HasKey(m => m.Id);
+
+            base.OnModelCreating(modelBuilder);
+
         }
     }
 }

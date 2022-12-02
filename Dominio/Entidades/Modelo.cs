@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,10 @@ namespace Dominio.Entidades
         }
 
         #region Propiedades
+        [Required]
         public int Sku { get; set; }
+
+        [Required]
         public string Descripcion { get; set; }
         public int LimiteInferiorReproceso { get; set; }
         public int LimiteSuperiorReproceso { get; set; }

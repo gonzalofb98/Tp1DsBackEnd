@@ -15,3 +15,20 @@ D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.So
 D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.pdb
 D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.genruntimeconfig.cache
 D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\tp1 project\Ing.Software.TP1\Datos\obj\Debug\net6.0\ref\Datos.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Datos.deps.json
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Datos.runtimeconfig.json
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Datos.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Datos.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Dominio.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\bin\Debug\net6.0\Dominio.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.csproj.AssemblyReference.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.GeneratedMSBuildEditorConfig.editorconfig
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.AssemblyInfoInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.AssemblyInfo.cs
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.csproj.CoreCompileInputs.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.csproj.CopyComplete
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\refint\Datos.dll
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.pdb
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\Datos.genruntimeconfig.cache
+D:\Usuario\Desktop\Gonzalo\4to año\ing de software\tp1 - tfi\BackEnd\Ing.Software.TP1\Datos\obj\Debug\net6.0\ref\Datos.dll

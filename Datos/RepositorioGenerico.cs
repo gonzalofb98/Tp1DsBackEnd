@@ -1,9 +1,6 @@
 ﻿using Dominio.Entidades;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Dominio.Contratos;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Datos

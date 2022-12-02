@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,11 @@ namespace Dominio.Entidades
     public class OrdenDeProduccion : EntidadBase
     {
         #region Propiedades
+        [Required]
         public string Numero { get; set; }
+        [Required]
         public DateTime FechaInicio  { get; set; }
+        [Required]
         public DateTime FechaFin { get; set; }
         #endregion
 
@@ -19,7 +23,7 @@ namespace Dominio.Entidades
         public Color Color { get; set; }
         public LineaDeTrabajo? Linea { get; set; }
         public EstadoOp Estado { get; set; }
-        public Empleado SupervisorDeLinea { get; set; }
+        public Usuario SupervisorDeLinea { get; set; }
 
         private List<JornadaLaboral?> _jornadas = new List<JornadaLaboral?>();
         public List<JornadaLaboral?> Jornadas { get { return _jornadas; } }
@@ -34,7 +38,7 @@ namespace Dominio.Entidades
         }
 
         public OrdenDeProduccion(string numero, DateTime fechaInicio, Modelo modelo, 
-            Color color, LineaDeTrabajo linea, Empleado supervisor)
+            Color color, LineaDeTrabajo linea, Usuario supervisor)
         {
             Numero = numero;
             FechaInicio = fechaInicio;

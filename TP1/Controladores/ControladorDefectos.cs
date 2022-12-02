@@ -1,5 +1,4 @@
-﻿using Castle.Core.Internal;
-using Dominio.Contratos;
+﻿using Dominio.Contratos;
 using Dominio.Entidades;
 using Microsoft.AspNetCore.Mvc;
 

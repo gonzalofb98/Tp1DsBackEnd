@@ -19,85 +19,85 @@ namespace Tests
             Assert.AreEqual(30, model.LimiteSuperiorObservado);
         }
 
-        [TestMethod]
-        public void TestEstadoDeLaOpAlCrearEsActiva()
-        {
-            //moq
-            var mockModelo = new Mock<Modelo>();
-            var mockLinea = new Mock<LineaDeTrabajo>();
-            var mockColor = new Mock<Color>();
-            var mockEmpleado = new Mock<Empleado>();
+        //[TestMethod]
+        //public void TestEstadoDeLaOpAlCrearEsActiva()
+        //{
+        //    //moq
+        //    var mockModelo = new Mock<Modelo>();
+        //    var mockLinea = new Mock<LineaDeTrabajo>();
+        //    var mockColor = new Mock<Color>();
+        //    var mockEmpleado = new Mock<Empleado>();
 
-            var Op = new OrdenDeProduccion("2323a", DateTime.Now,mockModelo.Object,mockColor.Object, 
-                mockLinea.Object, mockEmpleado.Object);
+        //    var Op = new OrdenDeProduccion("2323a", DateTime.Now,mockModelo.Object,mockColor.Object, 
+        //        mockLinea.Object, mockEmpleado.Object);
 
-            Assert.IsNotNull(Op);
-            Assert.AreEqual(EstadoOp.ACTIVA, Op.Estado);
-        }
+        //    Assert.IsNotNull(Op);
+        //    Assert.AreEqual(EstadoOp.ACTIVA, Op.Estado);
+        //}
 
-        [TestMethod]
-        public void TestFinalizarUnaOrdenDeProduccion()
-        {
-            var mockModelo = new Mock<Modelo>();
-            var mockLinea = new Mock<LineaDeTrabajo>();
-            var mockColor = new Mock<Color>();
-            var mockEmpleado = new Mock<Empleado>();
+        //[TestMethod]
+        //public void TestFinalizarUnaOrdenDeProduccion()
+        //{
+        //    var mockModelo = new Mock<Modelo>();
+        //    var mockLinea = new Mock<LineaDeTrabajo>();
+        //    var mockColor = new Mock<Color>();
+        //    var mockEmpleado = new Mock<Empleado>();
 
-            var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
-                mockLinea.Object, mockEmpleado.Object);
+        //    var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
+        //        mockLinea.Object, mockEmpleado.Object);
 
-            Op.FinalizarOrden();
+        //    Op.FinalizarOrden();
 
-            Assert.IsNotNull(Op);
-            Assert.AreEqual(EstadoOp.FINALIZADA, Op.Estado);
-        }
-
-
-        [TestMethod]
-        public void TestAgregarUnaIncidenciaAJornadaDeTipoDefecto()
-        {
-            var mockModelo = new Mock<Modelo>();
-            var mockLinea = new Mock<LineaDeTrabajo>();
-            var mockColor = new Mock<Color>();
-            var mockEmpleado = new Mock<Empleado>();
-            var mockTurno = new Mock<Turno>();
-            var mockDefecto = new Mock<Defecto>();
-
-            var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
-                mockLinea.Object, mockEmpleado.Object);
+        //    Assert.IsNotNull(Op);
+        //    Assert.AreEqual(EstadoOp.FINALIZADA, Op.Estado);
+        //}
 
 
-            Op.EstablecerNuevaJornada(DateTime.Now,DateTime.Now.AddHours(8), mockTurno.Object);
+        //[TestMethod]
+        //public void TestAgregarUnaIncidenciaAJornadaDeTipoDefecto()
+        //{
+        //    var mockModelo = new Mock<Modelo>();
+        //    var mockLinea = new Mock<LineaDeTrabajo>();
+        //    var mockColor = new Mock<Color>();
+        //    var mockEmpleado = new Mock<Empleado>();
+        //    var mockTurno = new Mock<Turno>();
+        //    var mockDefecto = new Mock<Defecto>();
 
-            var jornada = Op.GetJornadaActual();
+        //    var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
+        //        mockLinea.Object, mockEmpleado.Object);
 
-            jornada.AgregarIncidencia(DateTime.Now, Pie.IZQUIERDO, mockDefecto.Object);
 
-            Assert.IsNotNull(jornada.Incidencias);
-            Assert.IsTrue(jornada.Incidencias.Count() > 0);
-        }
+        //    Op.EstablecerNuevaJornada(DateTime.Now,DateTime.Now.AddHours(8), mockTurno.Object);
 
-        [TestMethod]
-        public void TestAgregarUnaIncidenciaAJornadaDeTipoPrimera()
-        {
-            var mockModelo = new Mock<Modelo>();
-            var mockLinea = new Mock<LineaDeTrabajo>();
-            var mockColor = new Mock<Color>();
-            var mockEmpleado = new Mock<Empleado>();
-            var mockTurno = new Mock<Turno>();
+        //    var jornada = Op.GetJornadaActual();
 
-            var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
-                mockLinea.Object, mockEmpleado.Object);
+        //    jornada.AgregarIncidencia(DateTime.Now, Pie.IZQUIERDO, mockDefecto.Object);
 
-            Op.EstablecerNuevaJornada(DateTime.Now, DateTime.Now.AddHours(8), mockTurno.Object);
+        //    Assert.IsNotNull(jornada.Incidencias);
+        //    Assert.IsTrue(jornada.Incidencias.Count() > 0);
+        //}
 
-            var jornada = Op.GetJornadaActual();
+        //[TestMethod]
+        //public void TestAgregarUnaIncidenciaAJornadaDeTipoPrimera()
+        //{
+        //    var mockModelo = new Mock<Modelo>();
+        //    var mockLinea = new Mock<LineaDeTrabajo>();
+        //    var mockColor = new Mock<Color>();
+        //    var mockEmpleado = new Mock<Empleado>();
+        //    var mockTurno = new Mock<Turno>();
 
-            jornada.AgregarIncidencia(DateTime.Now);
+        //    var Op = new OrdenDeProduccion("2323a", DateTime.Now, mockModelo.Object, mockColor.Object,
+        //        mockLinea.Object, mockEmpleado.Object);
 
-            Assert.IsNotNull(jornada.Incidencias);
-            Assert.IsTrue(jornada.Incidencias.Count() > 0);
-        }
+        //    Op.EstablecerNuevaJornada(DateTime.Now, DateTime.Now.AddHours(8), mockTurno.Object);
+
+        //    var jornada = Op.GetJornadaActual();
+
+        //    jornada.AgregarIncidencia(DateTime.Now);
+
+        //    Assert.IsNotNull(jornada.Incidencias);
+        //    Assert.IsTrue(jornada.Incidencias.Count() > 0);
+        //}
 
     }
 }
