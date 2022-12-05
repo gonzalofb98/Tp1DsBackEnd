@@ -1,4 +1,6 @@
-﻿using Dominio.Entidades;
+﻿using Datos;
+using Dominio.Contratos;
+using Dominio.Entidades;
 using Dto.Request;
 using Dto.Response;
 using Microsoft.AspNetCore.Identity;
@@ -128,6 +130,13 @@ namespace TP1.Controladores
                         }
                 });
             }
+        }
+
+        [HttpGet]
+        [Route("GetUser")]
+        public async Task<IActionResult> GetUser(string email)
+        {
+            return Ok(await _userManager.FindByEmailAsync(email));
         }
     }
 }

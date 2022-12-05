@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Dominio.Contratos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Datos
 {
