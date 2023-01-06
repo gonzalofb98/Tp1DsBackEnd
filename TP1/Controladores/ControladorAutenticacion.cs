@@ -10,7 +10,7 @@ using TP1.Configuraciones;
 
 namespace TP1.Controladores
 {
-    public record AuthenticateRequest(string UserName, string Password);
+    public record AuthenticateRequest(string Name, string Password);
 
 
     [ApiController]
@@ -44,11 +44,12 @@ namespace TP1.Controladores
                 {
                     return BadRequest("El correo electronico indicado ya existe!");
                 }
-                var isCreated = await _userManager.CreateAsync(new Usuario() { 
-                    UserName = user.Name,
+                var isCreated = await _userManager.CreateAsync(new Usuario { 
+                    Name = user.Name,
                     LastName = user.LastName, 
-                    Rol = (Rol)user.Rol, 
-                    Email = user.Email }, 
+                    UserName = user.Email,
+                    Rol = (Rol)user.Rol,
+                    Email = user.Email },
                     user.Password);
 
                 if (isCreated.Succeeded)

@@ -10,6 +10,9 @@ namespace Dominio.Entidades
 {
     public class Usuario : IdentityUser
     {
+
+        public string Name { get; set; }
+
         public string LastName { get; set; }
 
         public Rol Rol { get; set; }

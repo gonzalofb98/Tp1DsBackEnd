@@ -40,7 +40,7 @@ builder.Services.AddDbContext<ControlCalidadContexto>(option =>
     option.UseSqlServer(connstring)
     );
 
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));//
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 builder.Services
     .AddHttpContextAccessor()
     .AddAuthorization()
