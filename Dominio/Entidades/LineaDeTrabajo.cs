@@ -9,19 +9,21 @@ namespace Dominio.Entidades
 {
     public class LineaDeTrabajo : EntidadBase
     {
-        [Required]
-        public EstadoLinea estado = EstadoLinea.LIBRE;
         public LineaDeTrabajo()
         {
 
         }
+
         public LineaDeTrabajo(int numero)
         {
             Numero = numero;
+            Estado = EstadoLinea.LIBRE;
         }
 
 
         #region Propiedades
+        public EstadoLinea Estado { get; set; }
+
         [Required]
         public int Numero { get; set; }
         #endregion

@@ -164,6 +164,9 @@ namespace Datos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
                     b.Property<int>("Numero")
                         .HasColumnType("int");
 

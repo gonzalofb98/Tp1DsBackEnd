@@ -44,7 +44,7 @@ namespace Dominio.Entidades
             FechaInicio = fechaInicio;
             Modelo = modelo;
             Color = color;
-            if(linea.estado.Equals(EstadoLinea.LIBRE)) Linea = linea;
+            if(linea.Estado.Equals(EstadoLinea.LIBRE)) Linea = linea;
             SupervisorDeLinea = supervisor;
             Estado = EstadoOp.ACTIVA;
         }

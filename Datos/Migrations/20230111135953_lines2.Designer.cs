@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Datos.Migrations
 {
     [DbContext(typeof(ControlCalidadContexto))]
-    [Migration("20230104151617_NewMigrationForUser")]
-    partial class NewMigrationForUser
+    [Migration("20230111135953_lines2")]
+    partial class lines2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,6 +166,9 @@ namespace Datos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
 
                     b.Property<int>("Numero")
                         .HasColumnType("int");
