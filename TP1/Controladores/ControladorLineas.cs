@@ -19,13 +19,13 @@ namespace TP1.Controladores
 
     #region Metodos Get
     [HttpGet("Lines")]
-    public async Task<IActionResult> GetModels()
+    public async Task<IActionResult> GetLines()
     {
         return Ok(await _repositorio.GetTodosAsync());
     }
 
     [HttpGet("ById")]
-    public async Task<IActionResult> GetModelById(int number)
+    public async Task<IActionResult> GetLineById(int number)
     {
         return Ok(await _repositorio.GetAsync(number));
     }
@@ -70,13 +70,13 @@ namespace TP1.Controladores
     }
 
     [HttpDelete("Delete")]
-    public async Task<IActionResult> DeleteLine(int numero)
+    public async Task<IActionResult> DeleteLine(int id)
     {
-        await _repositorio.DeleteAsync(numero);
+        await _repositorio.DeleteAsync(id);
 
-        return Accepted( new { Id = numero } );
+        return Accepted( new { Id = id } );
     }
     #endregion
     }
 }
-public record LineaDto(int numero, EstadoLinea estado);
+public record LineaDto(int id, int numero, EstadoLinea estado);
