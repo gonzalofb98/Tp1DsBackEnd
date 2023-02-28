@@ -21,9 +21,5 @@ namespace Dominio.Entidades
         [Required]
         public string Descripcion { get; set; }
         #endregion
-
-        #region Relaciones
-        public IEnumerable<OrdenDeProduccion> OrdenesDeProduccion { get; set; }
-        #endregion
     }
 }

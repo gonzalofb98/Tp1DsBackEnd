@@ -32,9 +32,20 @@ namespace Dominio.Entidades
         public List<Alerta>? Alertas { get; set; }
         #endregion
 
-        protected OrdenDeProduccion()
+        public OrdenDeProduccion()
         {
 
+        }
+        public OrdenDeProduccion(string numero, Modelo modelo,
+            Color color, LineaDeTrabajo linea, Usuario supervisor)
+        {
+            Numero = numero;
+            Modelo = modelo;
+            Color = color;
+            Linea= linea;
+            SupervisorDeLinea = supervisor;
+            Estado = EstadoOp.ACTIVA;
+            FechaInicio = DateTime.Now;
         }
 
         public OrdenDeProduccion(string numero, DateTime fechaInicio, Modelo modelo, 

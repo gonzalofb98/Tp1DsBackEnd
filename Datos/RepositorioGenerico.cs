@@ -34,6 +34,25 @@ namespace Datos
             return await contexto.Set<T>()
                 .ToListAsync();
         }
+        public async Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate, params string[] includes)
+        {
+            return await Include(contexto.Set<T>(), includes).Where(predicate).ToListAsync();
+        }
+        public async Task<List<T>> ListAsync(params string[] includes)
+        {
+            return await Include(contexto.Set<T>(), includes).ToListAsync();
+        }
+        private IQueryable<T> Include(IQueryable<T> query, string[] includes)
+        {
+            var includedQuery = query;
+
+            foreach (var include in includes)
+            {
+                includedQuery = includedQuery.Include(include);
+            }
+
+            return includedQuery;
+        }
 
         public async Task<int> UpdateAsync(T item)
         {

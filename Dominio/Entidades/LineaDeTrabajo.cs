@@ -28,9 +28,6 @@ namespace Dominio.Entidades
         public int Numero { get; set; }
         #endregion
 
-        #region Relaciones
-        public IEnumerable<OrdenDeProduccion> OrdenesDeProduccion { get; set; }
-        #endregion
     }
 
     public enum EstadoLinea

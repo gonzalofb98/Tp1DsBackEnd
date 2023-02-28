@@ -36,8 +36,5 @@ namespace Dominio.Entidades
         public int LimiteSuperiorObservado { get; set; }
         #endregion
 
-        #region Relaciones
-        public IEnumerable<OrdenDeProduccion> OrdenesDeProduccion { get; set; }
-        #endregion
     }
 }
