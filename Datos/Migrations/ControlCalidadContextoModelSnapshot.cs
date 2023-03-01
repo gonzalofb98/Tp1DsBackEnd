@@ -262,10 +262,14 @@ namespace Datos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("FechaFin")
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("HoraFin")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaInicio")
+                    b.Property<DateTime>("HoraInicio")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -536,17 +540,17 @@ namespace Datos.Migrations
             modelBuilder.Entity("Dominio.Entidades.OrdenDeProduccion", b =>
                 {
                     b.HasOne("Dominio.Entidades.Color", "Color")
-                        .WithMany("OrdenesDeProduccion")
+                        .WithMany()
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Dominio.Entidades.LineaDeTrabajo", "Linea")
-                        .WithMany("OrdenesDeProduccion")
+                        .WithMany()
                         .HasForeignKey("LineaId");
 
                     b.HasOne("Dominio.Entidades.Modelo", "Modelo")
-                        .WithMany("OrdenesDeProduccion")
+                        .WithMany()
                         .HasForeignKey("ModeloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -617,24 +621,9 @@ namespace Datos.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dominio.Entidades.Color", b =>
-                {
-                    b.Navigation("OrdenesDeProduccion");
-                });
-
             modelBuilder.Entity("Dominio.Entidades.JornadaLaboral", b =>
                 {
                     b.Navigation("Incidencias");
-                });
-
-            modelBuilder.Entity("Dominio.Entidades.LineaDeTrabajo", b =>
-                {
-                    b.Navigation("OrdenesDeProduccion");
-                });
-
-            modelBuilder.Entity("Dominio.Entidades.Modelo", b =>
-                {
-                    b.Navigation("OrdenesDeProduccion");
                 });
 
             modelBuilder.Entity("Dominio.Entidades.OrdenDeProduccion", b =>

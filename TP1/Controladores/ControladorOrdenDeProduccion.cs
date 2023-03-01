@@ -44,43 +44,57 @@ namespace TP1.Controladores
         }
 
         [HttpGet("ById")]
-        public async Task<IActionResult> GetColorById(int id)
+        public async Task<IActionResult> GetOpById(int id)
         {
             return Ok(await _repositorio.GetAsync(id));
         }
 
-        [HttpGet("ByNumero")]
-        public async Task<IActionResult> GetColorByNumero(string numero)
+        [HttpGet("ByUsuario")]
+        public async Task<IActionResult> GetOpByUsuario(string email)
         {
-            return Ok(await _repositorio.GetConFiltro(x => x.Numero == numero));
+            return Ok((await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault());
         }
         #endregion
 
         #region Metodos Put, Post y Delete
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateOp(int id, [FromBody] OrdenDto opDto)
+        [HttpPut("ChangeEstado")]
+        public async Task<IActionResult> ChangeEstadoOp(string email)
         {
-            if (opDto == null)
+            var opExistente = (await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault();
+            if (opExistente.Estado == EstadoOp.ACTIVA)
             {
-                return BadRequest();
+                opExistente.Estado = EstadoOp.PAUSADA;
             }
             else
             {
-                //Cambiar por servicios con mapper
-                var newOp = new OrdenDeProduccion();
-                newOp.Numero = opDto.nroOp;
-                newOp.Modelo = await _repositorioModelo.GetAsync(opDto.modeloId);
-                newOp.Color = await _repositorioColor.GetAsync(opDto.colorId);
-                newOp.Linea = await _repositorioLinea.GetAsync(opDto.lineaId);
-                newOp.Id = id;
-                newOp.Estado = EstadoOp.ACTIVA;
-                newOp.SupervisorDeLinea = await _userManager.FindByEmailAsync(opDto.email);
-                var response = await _repositorio.UpdateAsync(newOp);
-                return Accepted(new
-                {
-                    Id = response
-                });
+                opExistente.Estado = EstadoOp.ACTIVA;
             }
+
+            await _repositorio.UpdateAsync(opExistente);
+
+            return Ok(opExistente);
+        }
+
+        [HttpPut("FinishOp")]
+        public async Task<IActionResult> FinishOp(string email)
+        {
+            var opExistente = (await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault();
+            if (opExistente != null || opExistente.Estado != EstadoOp.FINALIZADA)
+            {
+                opExistente.Estado = EstadoOp.FINALIZADA;
+                var linea = (await _repositorioLinea.GetConFiltro(x => x.Numero == opExistente.Linea.Numero)).FirstOrDefault();
+                linea.Estado = EstadoLinea.LIBRE;
+                opExistente.Linea.Estado = EstadoLinea.LIBRE;
+                await _repositorio.UpdateAsync(opExistente);
+                await _repositorioLinea.UpdateAsync(linea);
+            return Ok("La Op se finalizo correctamente.");
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+
         }
 
         [HttpPost("Create")]
@@ -110,7 +124,8 @@ namespace TP1.Controladores
                     var usuario = await _userManager.FindByEmailAsync(opDto.email);
                     if (usuario == null) return BadRequest("El usuario no existe");
                     await _repositorio.AgregarAsync(new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario));
-                return Created("",modelo);
+
+                    return Created("", "Created");
                 }
                 catch
                 {
