@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Datos.Migrations;
+using System.Collections.Generic;
+using Services.Herramientas;
 
 namespace TP1.Controladores
 {
@@ -16,6 +18,7 @@ namespace TP1.Controladores
         private readonly IRepositorioGenerico<OrdenDeProduccion> _repositorio;
         private readonly IRepositorioGenerico<Modelo> _repositorioModelo;
         private readonly IRepositorioGenerico<Color> _repositorioColor;
+        private readonly IRepositorioGenerico<Turno> _repositorioTurno;
         private readonly IRepositorioGenerico<LineaDeTrabajo> _repositorioLinea;
         private readonly UserManager<Usuario> _userManager;
 
@@ -23,6 +26,7 @@ namespace TP1.Controladores
             IRepositorioGenerico<OrdenDeProduccion> repositorio,
             IRepositorioGenerico<Modelo> repositorioModelo,
             IRepositorioGenerico<Color> repositorioColor,
+            IRepositorioGenerico<Turno> repositorioTurno,
             IRepositorioGenerico<LineaDeTrabajo> repositorioLinea,
             UserManager<Usuario> userManager
             )
@@ -31,6 +35,7 @@ namespace TP1.Controladores
             this._repositorioLinea= repositorioLinea;
             this._repositorioModelo = repositorioModelo;
             this._repositorioColor = repositorioColor;
+            this._repositorioTurno = repositorioTurno;
             this._userManager = userManager;
         }
 
@@ -39,7 +44,7 @@ namespace TP1.Controladores
         [HttpGet("OrdenesDeProduccion")]
         public async Task<IActionResult> GetOps()
         {
-            var ops = await _repositorio.ListAsync("Modelo", "Color", "Linea", "SupervisorDeLinea");
+            var ops = await _repositorio.ListAsync("Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad");
             return Ok(ops);
         }
 
@@ -48,11 +53,60 @@ namespace TP1.Controladores
         {
             return Ok(await _repositorio.GetAsync(id));
         }
+        
 
         [HttpGet("ByUsuario")]
         public async Task<IActionResult> GetOpByUsuario(string email)
         {
-            return Ok((await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault());
+            try
+            {
+                var op = (await _repositorio
+                    .ListAsync(x => x.SupervisorDeLinea.Email == email, 
+                    "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                if (op != null)
+                    return Ok(op);
+                else return Ok("Usuario no encontrado");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpGet("ByUsuarioCalidad")]
+        public async Task<IActionResult> GetOpByUsuarioCalidad(string email)
+        {
+            try
+            {
+                    .ListAsync(x => x.SupervisorDeCalidad.Email == email,
+                    "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                if (op != null)
+                    return Ok(op);
+                else return Ok("Usuario no encontrado");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet("ByLinea")]
+        public async Task<IActionResult> GetOpByLinea(int lineaId)
+        {
+            try
+            {
+                var op = (await _repositorio
+                    .ListAsync(x => x.Linea.Id == lineaId, 
+                    "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                return Ok(op);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
         }
         #endregion
 
@@ -60,14 +114,36 @@ namespace TP1.Controladores
         [HttpPut("ChangeEstado")]
         public async Task<IActionResult> ChangeEstadoOp(string email)
         {
-            var opExistente = (await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault();
-            if (opExistente.Estado == EstadoOp.ACTIVA)
+            var opExistente = (await _repositorio
+                .ListAsync(x => x.SupervisorDeLinea.Email == email, 
+                "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                opExistente.PausarReanudarOrden();
+
+            await _repositorio.UpdateAsync(opExistente);
+
+            return Ok(opExistente);
+        }
+
+        [HttpPut("VoD")]
+        public async Task<IActionResult> LinkOrUnlinkSupCalidad(string email, string numeroOp)
+        {
+            var supervisorDeCalidad = await _userManager.FindByEmailAsync(email);
+            if (supervisorDeCalidad == null) return BadRequest("Error, el usuario no se encontró");
+            var opExistente = (await _repositorio
+                .ListAsync(x => x.Numero == numeroOp,
+                "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .FirstOrDefault();
+            if (opExistente == null) return BadRequest("Error, el usuario no se encontró");
+
+            if(opExistente.SupervisorDeCalidad != null )
             {
-                opExistente.Estado = EstadoOp.PAUSADA;
+                if (opExistente.SupervisorDeCalidad.Email == email) opExistente.SupervisorDeCalidad = null;
+                else return BadRequest("Hay otro supervisor asignado a la Op");
             }
             else
             {
-                opExistente.Estado = EstadoOp.ACTIVA;
+                opExistente.SupervisorDeCalidad = supervisorDeCalidad;
             }
 
             await _repositorio.UpdateAsync(opExistente);
@@ -78,7 +154,10 @@ namespace TP1.Controladores
         [HttpPut("FinishOp")]
         public async Task<IActionResult> FinishOp(string email)
         {
-            var opExistente = (await _repositorio.ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), "Modelo", "Color", "Linea", "SupervisorDeLinea")).FirstOrDefault();
+            var opExistente = (await _repositorio
+                .ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), 
+                "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
+                .FirstOrDefault();
             if (opExistente != null || opExistente.Estado != EstadoOp.FINALIZADA)
             {
                 opExistente.Estado = EstadoOp.FINALIZADA;
@@ -101,8 +180,8 @@ namespace TP1.Controladores
         public async Task<IActionResult> SaveOp([FromBody] OrdenDto opDto)
         {
             if (opDto.nroOp == "") return BadRequest("No se ingreso el numero de OP");
-            var c = await _repositorio.GetConFiltro(x => x.Numero == opDto.nroOp);
-            if (c.Count != 0)
+            var opExistente = (await _repositorio.ListAsync(x => x.Numero == opDto.nroOp)).FirstOrDefault();
+            if (opExistente != null)
             {
                 return BadRequest("El Numero de OP ya existe");
             }
@@ -123,7 +202,14 @@ namespace TP1.Controladores
 
                     var usuario = await _userManager.FindByEmailAsync(opDto.email);
                     if (usuario == null) return BadRequest("El usuario no existe");
-                    await _repositorio.AgregarAsync(new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario));
+
+                    var newOp = new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario);
+
+                    var turnoActual = Utils.GetTurnoActual((await _repositorioTurno.GetTodosAsync()).ToList());
+
+                    newOp.EstablecerNuevaJornada(DateTime.Now, turnoActual);
+
+                    await _repositorio.AgregarAsync(newOp);
 
                     return Created("", "Created");
                 }

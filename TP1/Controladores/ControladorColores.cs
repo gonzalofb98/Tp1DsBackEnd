@@ -63,18 +63,25 @@ namespace TP1.Controladores
         [HttpPost("Create")]
         public async Task<IActionResult> SaveColor([FromBody] ColorDto color)
         {
-            if (color.codigo == 0) return BadRequest("Codigo no puede ser 0");
-            if (await _repositorio.GetAsync(color.codigo) != null)
+            try
             {
-                return BadRequest("El Codigo ya existe");
+                if (color.codigo == 0) return BadRequest("Codigo no puede ser 0");
+                var colorExistente = (await _repositorio.ListAsync(x => x.Codigo == color.codigo)).FirstOrDefault();
+                if (colorExistente != null)
+                {
+                    return BadRequest("El Codigo ya existe");
+                }
+                else
+                {
+                    var newColor = new Color(color.codigo,
+                        color.descripcion);
+                    await _repositorio.AgregarAsync(newColor);
+                    return Created("", newColor);
+                }
             }
-            else
-            {
-                //Cambiar por servicios con mapper
-                var newColor = new Color(color.codigo,
-                    color.descripcion);
-                await _repositorio.AgregarAsync(newColor);
-                return Created("", newColor);
+            catch (Exception e)
+            { 
+                return BadRequest(e); 
             }
         }
 

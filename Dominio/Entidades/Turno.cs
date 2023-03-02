@@ -25,5 +25,17 @@ namespace Dominio.Entidades
         #region Relaciones
         public IEnumerable<JornadaLaboral> Jornadas { get; set; }
         #endregion
+
+        public List<int> getTotalHoras()
+        {
+            var listaHoras = new List<int>();
+            for (var i = HoraInicio.Hour; i < HoraFin.Hour; i++)
+            {
+                listaHoras.Add(i);
+                if (i+1 == HoraFin.Hour && HoraFin.Minute > 0)
+                    listaHoras.Add(i+1);
+            }
+            return listaHoras;
+        }
     }
 }

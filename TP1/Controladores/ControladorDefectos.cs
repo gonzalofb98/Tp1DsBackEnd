@@ -1,6 +1,7 @@
 ﻿using Dominio.Contratos;
 using Dominio.Entidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 
 namespace TP1.Controllers
 {
@@ -29,7 +30,7 @@ namespace TP1.Controllers
         }
 
         [HttpGet("ByDescription")]
-        public async Task<IActionResult> GetModelByDescription(string description)
+        public async Task<IActionResult> GetDefectByDescription(string description)
         {
             return Ok(await _repositorio.GetConFiltro(x => x.Descripcion == description));
         }
@@ -37,7 +38,7 @@ namespace TP1.Controllers
 
         #region Metodos Put, Post y Delete
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateModel(int id, [FromBody] DefectDto defectDto)
+        public async Task<IActionResult> UpdateDefect(int id, [FromBody] DefectDto defectDto)
         {
             if (defectDto == null)
             {
@@ -59,23 +60,30 @@ namespace TP1.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> SaveModel([FromBody] DefectDto defectDto)
+        public async Task<IActionResult> SaveDefect([FromBody] DefectDto defectDto)
         {
-            if (defectDto.descripcion == "") return BadRequest("No posee una descripcion");
-            var temp = await _repositorio.GetConFiltro(x => x.Descripcion == defectDto.descripcion);
-            if (temp.Count() != 0) 
+            try
             {
-                return BadRequest("El Defecto ya existe");
+                if (defectDto.descripcion == "") return BadRequest("No posee una descripcion");
+                var defectoExistente = (await _repositorio.ListAsync(x => x.Descripcion == defectDto.descripcion)).FirstOrDefault();
+                if (defectoExistente != null)
+                {
+                    return BadRequest("El Defecto ya existe");
+                }
+                else
+                {
+                    var defect = new Defecto(
+                        defectDto.descripcion,
+                        (TipoDefecto)defectDto.tipo);
+                    await _repositorio.AgregarAsync(defect);
+                    return Created("", defect);
+                }
             }
-            else
+            catch(Exception e)
             {
-                //Cambiar por servicios con mapper
-                var defect = new Defecto(
-                    defectDto.descripcion,
-                    (TipoDefecto) defectDto.tipo);
-                await _repositorio.AgregarAsync(defect);
-                return Created("", defect);
+                return BadRequest(e);
             }
+            
         }
 
         [HttpDelete("Delete")]

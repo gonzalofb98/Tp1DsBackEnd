@@ -1,6 +1,7 @@
 ﻿using Dominio.Contratos;
 using Dominio.Entidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -56,7 +57,7 @@ namespace TP1.Controladores
     public async Task<IActionResult> SaveLine([FromBody] LineaDto lineaDto)
     {
         if (lineaDto.numero == 0) return BadRequest("No puede haber una linea 0");
-        if (await _repositorio.GetAsync(lineaDto.numero) != null)
+        if ((await _repositorio.ListAsync(x => x.Numero == lineaDto.numero)).FirstOrDefault() != null)
         {
             return BadRequest("La linea que intenta crear ya existe");
         }

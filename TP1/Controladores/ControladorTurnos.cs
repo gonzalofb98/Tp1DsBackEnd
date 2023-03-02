@@ -2,6 +2,7 @@
 using Dominio.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services.Herramientas;
 using System.Globalization;
 
 namespace TP1.Controladores
@@ -24,6 +25,13 @@ namespace TP1.Controladores
             return Ok(await _repositorio.GetTodosAsync());
         }
 
+        [HttpGet("CurrentTurn")]
+        public async Task<IActionResult> GetTurnoActual()
+        {
+            var turnoActual = Utils.GetTurnoActual((await _repositorio.GetTodosAsync()).ToList()) ;
+            return Ok(turnoActual);
+        }
+
         [HttpGet("ById")]
         public async Task<IActionResult> GetTurnById(int id)
         {
@@ -33,8 +41,17 @@ namespace TP1.Controladores
         [HttpGet("ByDescripcion")]
         public async Task<IActionResult> GetTurnByDescripcion(string desc)
         {
-            return Ok((await _repositorio.ListAsync(x => x.Descripcion == desc)).FirstOrDefault()
-);
+            return Ok((await _repositorio.ListAsync(x => x.Descripcion == desc)).FirstOrDefault());
+        }
+
+        [HttpGet("TotalHorasByDescripcion")]
+        public async Task<IActionResult> GetTotalHorasByDescripcion(string desc)
+        {
+            if(desc == null ||desc == "") return BadRequest("Error, ingrese una descripcion ");
+            var turno = (await _repositorio.ListAsync(x => x.Descripcion == desc)).FirstOrDefault();
+            if(turno == null) return BadRequest("Error, el turno no existe");
+            var listaHoras = turno.getTotalHoras();
+            return Ok(listaHoras);
         }
         #endregion
 

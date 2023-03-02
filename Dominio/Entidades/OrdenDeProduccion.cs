@@ -24,6 +24,7 @@ namespace Dominio.Entidades
         public LineaDeTrabajo? Linea { get; set; }
         public EstadoOp Estado { get; set; }
         public Usuario SupervisorDeLinea { get; set; }
+        public Usuario? SupervisorDeCalidad { get; set; }
 
         private List<JornadaLaboral?> _jornadas = new List<JornadaLaboral?>();
         public List<JornadaLaboral?> Jornadas { get { return _jornadas; } }
@@ -37,32 +38,20 @@ namespace Dominio.Entidades
 
         }
         public OrdenDeProduccion(string numero, Modelo modelo,
-            Color color, LineaDeTrabajo linea, Usuario supervisor)
+            Color color, LineaDeTrabajo linea, Usuario supervisorLinea)
         {
             Numero = numero;
             Modelo = modelo;
             Color = color;
             Linea= linea;
-            SupervisorDeLinea = supervisor;
+            SupervisorDeLinea = supervisorLinea;
             Estado = EstadoOp.ACTIVA;
             FechaInicio = DateTime.Now;
         }
 
-        public OrdenDeProduccion(string numero, DateTime fechaInicio, Modelo modelo, 
-            Color color, LineaDeTrabajo linea, Usuario supervisor)
+        public void EstablecerNuevaJornada(DateTime horaInicio, Turno turno)
         {
-            Numero = numero;
-            FechaInicio = fechaInicio;
-            Modelo = modelo;
-            Color = color;
-            if(linea.Estado.Equals(EstadoLinea.LIBRE)) Linea = linea;
-            SupervisorDeLinea = supervisor;
-            Estado = EstadoOp.ACTIVA;
-        }
-
-        public void EstablecerNuevaJornada(DateTime fechaInicio, DateTime fechaFin, Turno turno)
-        {
-            _jornadas.Add(new JornadaLaboral(fechaInicio,fechaFin,turno));
+            _jornadas.Add(new JornadaLaboral(horaInicio, turno));
         }
 
         public JornadaLaboral? GetJornadaActual()
@@ -74,9 +63,10 @@ namespace Dominio.Entidades
         {
             Estado = EstadoOp.FINALIZADA;
         }
-        public void PausarOrden()
+        public void PausarReanudarOrden()
         {
-            Estado = EstadoOp.PAUSADA;
+            if (Estado == EstadoOp.PAUSADA) Estado = EstadoOp.ACTIVA;
+            else Estado = EstadoOp.PAUSADA;
         }
     }
     public enum EstadoOp

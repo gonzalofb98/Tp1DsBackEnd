@@ -64,7 +64,8 @@ public class ControladorModelos : Controller
     public async Task<IActionResult> SaveModel([FromBody] ModeloDto modelo)
     {
         if (modelo.sku == 0) return BadRequest("Sku no puede ser 0");
-        if (await _repositorio.GetAsync(modelo.sku) != null)
+        var modeloExistente = (await _repositorio.ListAsync(x => x.Sku == modelo.sku)).FirstOrDefault();
+        if (modeloExistente != null)
         {
             return BadRequest("El Modelo ya existe");
         }

@@ -237,6 +237,10 @@ namespace Datos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SupervisorDeCalidadId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("SupervisorDeLineaId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -248,6 +252,8 @@ namespace Datos.Migrations
                     b.HasIndex("LineaId");
 
                     b.HasIndex("ModeloId");
+
+                    b.HasIndex("SupervisorDeCalidadId");
 
                     b.HasIndex("SupervisorDeLineaId");
 
@@ -555,6 +561,12 @@ namespace Datos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Dominio.Entidades.Usuario", "SupervisorDeCalidad")
+                        .WithMany()
+                        .HasForeignKey("SupervisorDeCalidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Dominio.Entidades.Usuario", "SupervisorDeLinea")
                         .WithMany()
                         .HasForeignKey("SupervisorDeLineaId")
@@ -566,6 +578,8 @@ namespace Datos.Migrations
                     b.Navigation("Linea");
 
                     b.Navigation("Modelo");
+
+                    b.Navigation("SupervisorDeCalidad");
 
                     b.Navigation("SupervisorDeLinea");
                 });
