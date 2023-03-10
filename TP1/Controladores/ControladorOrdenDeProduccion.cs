@@ -78,6 +78,7 @@ namespace TP1.Controladores
         {
             try
             {
+                var op = (await _repositorio
                     .ListAsync(x => x.SupervisorDeCalidad.Email == email,
                     "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
@@ -172,8 +173,6 @@ namespace TP1.Controladores
             {
                 return BadRequest();
             }
-
-
         }
 
         [HttpPost("Create")]
