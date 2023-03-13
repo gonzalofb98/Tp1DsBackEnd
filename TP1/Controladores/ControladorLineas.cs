@@ -1,9 +1,6 @@
-﻿using Dominio.Contratos;
-using Dominio.Entidades;
+﻿using Dto;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Services.Interfaces;
 
 namespace TP1.Controladores
 {
@@ -11,73 +8,72 @@ namespace TP1.Controladores
     [ApiController]
     public class ControladorLineas : ControllerBase
     {
-         private readonly IRepositorioGenerico<LineaDeTrabajo> _repositorio;
+        private readonly ILineService _LineService;
 
-    public ControladorLineas(IRepositorioGenerico<LineaDeTrabajo> repositorio)
+    public ControladorLineas(ILineService lineService)
     {
-        this._repositorio = repositorio;
+        this._LineService = lineService;
     }
 
     #region Metodos Get
     [HttpGet("Lines")]
     public async Task<IActionResult> GetLines()
     {
-        return Ok(await _repositorio.GetTodosAsync());
+        return Ok(await _LineService.GetTodosAsync());
     }
 
     [HttpGet("ById")]
     public async Task<IActionResult> GetLineById(int number)
     {
-        return Ok(await _repositorio.GetAsync(number));
+        return Ok(await _LineService.GetAsync(number));
     }
     #endregion
 
     #region Metodos Put, Post y Delete
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateLine(int id, [FromBody] LineaDto lineaDto)
+    public async Task<IActionResult> UpdateLine(int id, [FromBody] LineaDeTrabajoDto lineaDto)
     {
-        if (lineaDto == null) { 
-            return BadRequest(); 
-        }
-        else 
-        {
-            //Cambiar por servicios con mapper
-            var line = new LineaDeTrabajo(lineaDto.numero);
-                line.Id = id;
-                line.Estado = lineaDto.estado;
-            var response = await _repositorio.UpdateAsync(line);
-            return Accepted(new
+            try
             {
-                Id = response
-            });
-        }
+                var response = await _LineService.ModificarLineaDeTrabajo(id, lineaDto);
+                return Accepted(new
+                {
+                    Id = response
+                });
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
     }
 
     [HttpPost("Create")]
-    public async Task<IActionResult> SaveLine([FromBody] LineaDto lineaDto)
+    public async Task<IActionResult> SaveLine([FromBody] LineaDeTrabajoDto lineaDto)
     {
-        if (lineaDto.numero == 0) return BadRequest("No puede haber una linea 0");
-        if ((await _repositorio.ListAsync(x => x.Numero == lineaDto.numero)).FirstOrDefault() != null)
-        {
-            return BadRequest("La linea que intenta crear ya existe");
-        }
-        else
-        {
-            //Cambiar por servicios con mapper
-            var line = new LineaDeTrabajo(lineaDto.numero);
-            await _repositorio.AgregarAsync(line);
-            return Created("", line);
-        }
+            try
+            {
+                var line = await _LineService.CrearLineaDeTrabajo(lineaDto);
+                return Created("", line);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
     }
 
     [HttpDelete("Delete")]
     public async Task<IActionResult> DeleteLine(int id)
     {
-        await _repositorio.DeleteAsync(id);
-
-        return Accepted( new { Id = id } );
+            try
+            {
+                await _LineService.EliminarLineaDeTrabajo(id);
+                return Accepted(new { Id = id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
     }
     #endregion
     }
 }
-public record LineaDto(int id, int numero, EstadoLinea estado);

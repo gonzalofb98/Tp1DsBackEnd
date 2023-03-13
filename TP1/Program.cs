@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Services.Interfaces;
 using Services;
+using Services.Herramientas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +19,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-//Registra el tipo Repositorio
+//Inyeccion de dependencias
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddTransient(typeof(IRepositorioGenerico<>), typeof(RepositorioGenerico<>))
     .AddScoped(typeof(ITokenHandlerService), typeof(TokenHandlerService));
+builder.Services.AddTransient<ILineService, LineService>();
+builder.Services.AddTransient<IModelService, ModelService>();
+builder.Services.AddTransient<IColorService, ColorService>();
 
 //cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

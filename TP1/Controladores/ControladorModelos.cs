@@ -1,17 +1,20 @@
 ﻿using Dominio.Contratos;
 using Dominio.Entidades;
+using Dto;
 using Microsoft.AspNetCore.Mvc;
+using Services;
+using Services.Interfaces;
 
 namespace TP1.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class ControladorModelos : Controller
 {
-    private readonly IRepositorioGenerico<Modelo> _repositorio;
+    private readonly IModelService _modelService;
 
-    public ControladorModelos(IRepositorioGenerico<Modelo> repositorio)
+    public ControladorModelos(IModelService modelService)
     {
-        this._repositorio = repositorio;
+        this._modelService = modelService;
     }
 
 
@@ -19,79 +22,66 @@ public class ControladorModelos : Controller
     [HttpGet("Models")]
     public async Task<IActionResult> GetModels()
     {
-        return Ok(await _repositorio.GetTodosAsync());
+        return Ok(await _modelService.GetTodosAsync());
     }
 
     [HttpGet("ById")]
     public async Task<IActionResult> GetModelById(int id)
     {
-        return Ok(await _repositorio.GetAsync(id));
+        return Ok(await _modelService.GetAsync(id));
     }
 
     [HttpGet("BySku")]
     public async Task<IActionResult> GetModelBySku(int sku)
     {
-        return Ok(await _repositorio.GetConFiltro(x => x.Sku == sku));
+        return Ok(await _modelService.GetConFiltro(x => x.Sku == sku));
     }
     #endregion
 
     #region Metodos Put, Post y Delete
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateModel(int id, [FromBody] ModeloDto modelo)
+    public async Task<IActionResult> UpdateModel(int id, [FromBody] ModeloDto modeloDto)
     {
-        if (modelo == null) { 
-            return BadRequest(); 
-        }
-        else 
+        try
         {
-            //Cambiar por servicios con mapper
-            var model = new Modelo(modelo.sku,
-                modelo.descripcion,
-                modelo.limiteInferiorReproceso,
-                modelo.limiteSuperiorReproceso,
-                modelo.limiteInferiorObservado,
-                modelo.limiteSuperiorObservado);
-            model.Id = id;
-            var response = await _repositorio.UpdateAsync(model);
+            var response = await _modelService.ModificarModelo(id, modeloDto);
             return Accepted(new
             {
                 Id = response
             });
         }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("Create")]
-    public async Task<IActionResult> SaveModel([FromBody] ModeloDto modelo)
+    public async Task<IActionResult> SaveModel([FromBody] ModeloDto modeloDto)
     {
-        if (modelo.sku == 0) return BadRequest("Sku no puede ser 0");
-        var modeloExistente = (await _repositorio.ListAsync(x => x.Sku == modelo.sku)).FirstOrDefault();
-        if (modeloExistente != null)
+        try
         {
-            return BadRequest("El Modelo ya existe");
+            var modelo = await _modelService.CrearModelo(modeloDto);
+            return Created("", modelo);
         }
-        else
+        catch (Exception ex)
         {
-            //Cambiar por servicios con mapper
-            var model = new Modelo(modelo.sku, 
-                modelo.descripcion,
-                modelo.limiteInferiorReproceso, 
-                modelo.limiteSuperiorReproceso, 
-                modelo.limiteInferiorObservado, 
-                modelo.limiteSuperiorObservado);
-            await _repositorio.AgregarAsync(model);
-            return Created("", model);
+            return BadRequest(ex.Message);
         }
     }
 
     [HttpDelete("Delete")]
     public async Task<IActionResult> DeleteModelBySku(int id)
     {
-        await _repositorio.DeleteAsync(id);
-
-        return Accepted( new { Id = id } );
+        try
+        {
+            await _modelService.EliminarModelo(id);
+            return Accepted(new { Id = id });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
     #endregion
 }
-
-public record ModeloDto(int id, int sku, string descripcion, int limiteInferiorReproceso,
-        int limiteSuperiorReproceso, int limiteInferiorObservado, int limiteSuperiorObservado);

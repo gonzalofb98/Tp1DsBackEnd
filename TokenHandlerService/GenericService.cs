@@ -1,4 +1,5 @@
-﻿using Dominio.Contratos;
+﻿using AutoMapper;
+using Dominio.Contratos;
 using Dominio.Entidades;
 using Services.Interfaces;
 using System;
@@ -10,60 +11,73 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class GenericService<Entity, Response, Request> : IGenericService<Entity, Response, Request>
+    public class GenericService<Entity, Response> : IGenericService<Entity, Response>
         where Entity: EntidadBase 
         where Response : class
     {
         private readonly IRepositorioGenerico<Entity> _genericRepository;
+        private readonly IMapper _mapper;
 
-        public GenericService(IRepositorioGenerico<Entity> repositorioGenerico)
+        public GenericService(IRepositorioGenerico<Entity> repositorioGenerico, IMapper mapper)
         {
             _genericRepository = repositorioGenerico;
+            _mapper = mapper;
         }
 
-        public Task<int> AgregarAsync(Entity item)
+        public async Task<int> AgregarAsync(Entity item)
         {
-            throw new NotImplementedException();
+            var entityModel = _mapper.Map<Entity>(item);
+            return await _genericRepository.AgregarAsync(entityModel);
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+             await _genericRepository.DeleteAsync(id);
         }
 
-        public Task DeleteRange(IEnumerable<Entity> elements)
+        public async Task DeleteRange(IEnumerable<Entity> elements)
         {
-            throw new NotImplementedException();
+            await  _genericRepository.DeleteRange(_mapper.Map<IEnumerable<Entity>, ICollection<Entity>>(elements));
         }
 
-        public Task<Entity> GetAsync(int id)
+        public async Task<Response> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _genericRepository.GetAsync(id);
+
+            if (entity == null)
+                return null;
+
+            return _mapper.Map<Response>(entity);
         }
 
-        public Task<ICollection<Entity>> GetConFiltro(Expression<Func<Entity, bool>> predicado)
+        public async Task<ICollection<Response>> GetConFiltro(Expression<Func<Entity, bool>> predicado)
         {
-            throw new NotImplementedException();
+            var collection = await _genericRepository.GetConFiltro(predicado);
+            return _mapper.Map<ICollection<Entity>, ICollection<Response>>(collection);
         }
 
-        public Task<ICollection<Entity>> GetTodosAsync()
+        public async Task<ICollection<Entity>> GetTodosAsync()
         {
-            throw new NotImplementedException();
+            var collection = await _genericRepository.GetTodosAsync();
+            return collection;
         }
 
-        public Task<List<Entity>> ListAsync(Expression<Func<Entity, bool>> predicate, params string[] includes)
+        public async Task<List<Entity>> ListAsync(Expression<Func<Entity, bool>> predicate, params string[] includes)
         {
-            throw new NotImplementedException();
+            var collection = await _genericRepository.ListAsync(predicate, includes);
+            return collection;
         }
 
-        public Task<List<Entity>> ListAsync(params string[] includes)
+        public async Task<List<Entity>> ListAsync(params string[] includes)
         {
-            throw new NotImplementedException();
+            var collection = await _genericRepository.ListAsync(includes);
+            return collection;
         }
 
-        public Task<int> UpdateAsync(Entity item)
+        public async Task<int> UpdateAsync(Entity item)
         {
-            throw new NotImplementedException();
+            var entityModel = _mapper.Map<Entity>(item);
+            return await _genericRepository.UpdateAsync(entityModel);
         }
     }
 }

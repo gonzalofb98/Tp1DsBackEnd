@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "HFQAN/CVo5H/Kw9jyCeruqe2QjoI1vMskQ0Iau/mcd9aDoOvMuZ7v9ftUxQ2jIKRKouWPr1BKC/juR16erpPvw==",
+  "dgSpecHash": "64YBLK75u8gormjdnBgUFc994jr4zH4Jfob8w/58VSfzecFFswFHWzO3r7jz8PYPJGoSZ5i2HHuz7lC8boH/2Q==",
   "success": true,
   "projectFilePath": "D:\\Usuario\\Desktop\\Gonzalo\\4to año\\ing de software\\tp1 - tfi\\BackEnd\\Ing.Software.TP1\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Usuario\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
