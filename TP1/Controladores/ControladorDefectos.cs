@@ -1,6 +1,9 @@
 ﻿using Dominio.Contratos;
 using Dominio.Entidades;
+using Dto;
 using Microsoft.AspNetCore.Mvc;
+using Services;
+using Services.Interfaces;
 using System.Drawing;
 
 namespace TP1.Controllers
@@ -9,91 +12,78 @@ namespace TP1.Controllers
     [Route("[controller]")]
     public class ControladorDefectos : Controller
     {
-        private readonly IRepositorioGenerico<Defecto> _repositorio;
+        private readonly IDefectService _defectService;
 
-        public ControladorDefectos(IRepositorioGenerico<Defecto> repositorio)
+        public ControladorDefectos(IDefectService defectService)
         {
-            this._repositorio = repositorio;
+            this._defectService = defectService;
         }
 
         #region Metodos Get
         [HttpGet("Defects")]
         public async Task<IActionResult> GetDefects()
         {
-            return Ok(await _repositorio.GetTodosAsync());
+            return Ok(await _defectService.GetTodosAsync());
         }
 
         [HttpGet("ById")]
         public async Task<IActionResult> GetDefectById(int id)
         {
-            return Ok(await _repositorio.GetAsync(id));
+            return Ok(await _defectService.GetAsync(id));
         }
 
         [HttpGet("ByDescription")]
         public async Task<IActionResult> GetDefectByDescription(string description)
         {
-            return Ok(await _repositorio.GetConFiltro(x => x.Descripcion == description));
+            return Ok(await _defectService.GetConFiltro(x => x.Descripcion == description));
         }
         #endregion
 
         #region Metodos Put, Post y Delete
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateDefect(int id, [FromBody] DefectDto defectDto)
+        public async Task<IActionResult> UpdateDefect(int id, [FromBody] DefectoDto defectDto)
         {
-            if (defectDto == null)
+            try
             {
-                return BadRequest();
-            }
-            else
-            {
-                //Cambiar por servicios con mapper
-                var defect = new Defecto(
-                    defectDto.descripcion,
-                    (TipoDefecto) defectDto.tipo);
-                defect.Id = id;
-                var response = await _repositorio.UpdateAsync(defect);
+                var response = await _defectService.ModificarDefecto(id, defectDto);
                 return Accepted(new
                 {
                     Id = response
                 });
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> SaveDefect([FromBody] DefectDto defectDto)
+        public async Task<IActionResult> SaveDefect([FromBody] DefectoDto defectDto)
         {
             try
             {
-                if (defectDto.descripcion == "") return BadRequest("No posee una descripcion");
-                var defectoExistente = (await _repositorio.ListAsync(x => x.Descripcion == defectDto.descripcion)).FirstOrDefault();
-                if (defectoExistente != null)
-                {
-                    return BadRequest("El Defecto ya existe");
-                }
-                else
-                {
-                    var defect = new Defecto(
-                        defectDto.descripcion,
-                        (TipoDefecto)defectDto.tipo);
-                    await _repositorio.AgregarAsync(defect);
-                    return Created("", defect);
-                }
+                var color = await _defectService.CrearDefecto(defectDto);
+                return Created("", color);
             }
-            catch(Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e);
+                return BadRequest(ex.Message);
             }
-            
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteDefect(int id)
         {
-            await _repositorio.DeleteAsync(id);
-
-            return Accepted(new { Id = id });
+            try
+            {
+                await _defectService.EliminarDefecto(id);
+                return Accepted(new { Id = id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         #endregion
     }
 }
-public record DefectDto(int id, string descripcion, int tipo);

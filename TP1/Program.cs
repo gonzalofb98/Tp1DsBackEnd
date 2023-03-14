@@ -26,6 +26,7 @@ builder.Services.AddTransient(typeof(IRepositorioGenerico<>), typeof(Repositorio
 builder.Services.AddTransient<ILineService, LineService>();
 builder.Services.AddTransient<IModelService, ModelService>();
 builder.Services.AddTransient<IColorService, ColorService>();
+builder.Services.AddTransient<IDefectService, DefectService>();
 
 //cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
