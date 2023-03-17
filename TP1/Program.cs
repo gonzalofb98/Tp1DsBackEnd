@@ -27,6 +27,8 @@ builder.Services.AddTransient<ILineService, LineService>();
 builder.Services.AddTransient<IModelService, ModelService>();
 builder.Services.AddTransient<IColorService, ColorService>();
 builder.Services.AddTransient<IDefectService, DefectService>();
+builder.Services.AddTransient<ITurnService, TurnService>();
+builder.Services.AddTransient<IIncidenciaService, IncidenciaService>();
 
 //cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

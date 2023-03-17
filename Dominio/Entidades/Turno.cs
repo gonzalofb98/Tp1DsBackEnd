@@ -22,10 +22,6 @@ namespace Dominio.Entidades
         public string Descripcion { get; set; }
         #endregion
 
-        #region Relaciones
-        public IEnumerable<JornadaLaboral> Jornadas { get; set; }
-        #endregion
-
         public List<int> getTotalHoras()
         {
             var listaHoras = new List<int>();

@@ -1,8 +1,12 @@
 ﻿using Dominio.Contratos;
 using Dominio.Entidades;
+using Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Services;
 using Services.Herramientas;
+using Services.Interfaces;
+using System.Drawing;
 using System.Globalization;
 
 namespace TP1.Controladores
@@ -11,47 +15,51 @@ namespace TP1.Controladores
     [ApiController]
     public class ControladorTurnos : ControllerBase
     {
-        private readonly IRepositorioGenerico<Turno> _repositorio;
+        private readonly ITurnService _turnService;
 
-        public ControladorTurnos(IRepositorioGenerico<Turno> repositorio)
+        public ControladorTurnos(ITurnService turnService)
         {
-            this._repositorio = repositorio;
+            this._turnService = turnService;
         }
 
         #region Metodos Get
         [HttpGet("Turns")]
         public async Task<IActionResult> GetTurns()
         {
-            return Ok(await _repositorio.GetTodosAsync());
+            return Ok(await _turnService.GetTodosAsync());
         }
 
         [HttpGet("CurrentTurn")]
         public async Task<IActionResult> GetTurnoActual()
         {
-            var turnoActual = Utils.GetTurnoActual((await _repositorio.GetTodosAsync()).ToList()) ;
+            var turnoActual = Utils.GetTurnoActual((await _turnService.GetTodosAsync()).ToList()) ;
             return Ok(turnoActual);
         }
 
         [HttpGet("ById")]
         public async Task<IActionResult> GetTurnById(int id)
         {
-            return Ok(await _repositorio.GetAsync(id));
+            return Ok(await _turnService.GetAsync(id));
         }
 
         [HttpGet("ByDescripcion")]
         public async Task<IActionResult> GetTurnByDescripcion(string desc)
         {
-            return Ok((await _repositorio.ListAsync(x => x.Descripcion == desc)).FirstOrDefault());
+            return Ok((await _turnService.ListAsync(x => x.Descripcion == desc)).FirstOrDefault());
         }
 
         [HttpGet("TotalHorasByDescripcion")]
         public async Task<IActionResult> GetTotalHorasByDescripcion(string desc)
         {
-            if(desc == null ||desc == "") return BadRequest("Error, ingrese una descripcion ");
-            var turno = (await _repositorio.ListAsync(x => x.Descripcion == desc)).FirstOrDefault();
-            if(turno == null) return BadRequest("Error, el turno no existe");
-            var listaHoras = turno.getTotalHoras();
-            return Ok(listaHoras);
+            try
+            {
+                var listaHoras = await _turnService.GetTotalHorasByDescripcion(desc);
+                return Ok(listaHoras);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         #endregion
 
@@ -59,70 +67,46 @@ namespace TP1.Controladores
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateTurn(int id, [FromBody] TurnoDto turnDto)
         {
-            if (turnDto == null)
+            try
             {
-                return BadRequest();
-            }
-            else
+                var response = _turnService.ModificarTurno(id, turnDto);
+                return Ok(new
+                {
+                    Id = response
+                });
+            }catch(Exception ex)
             {
-                DateTime horaInicio;
-                DateTime horaFin;
-
-                if (DateTime.TryParseExact(turnDto.horaInicio, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horaInicio) && 
-                    DateTime.TryParseExact(turnDto.horaFin, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horaFin))
-                {
-                    var newTurno = new Turno(horaInicio, horaFin, turnDto.descripcion);
-                    newTurno.Id = id;
-                    var response = await _repositorio.UpdateAsync(newTurno);
-                    return Accepted(new
-                    {
-                        Id = response
-                    });
-                }
-                else
-                {
-                    return BadRequest();
-                }
-                
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost("Create")]
         public async Task<IActionResult> SaveTurn([FromBody] TurnoDto turnDto)
         {
-            if (turnDto == null) return BadRequest("Se ingreso incorrectamente los datos del turno");
-            if ((await _repositorio.ListAsync(x => x.Descripcion == turnDto.descripcion)).FirstOrDefault() != null)
+            try
             {
-                return BadRequest("El turno que intenta crear ya existe");
+                var response = await _turnService.CrearTurno(turnDto);
+                return Created("", response);
             }
-            else
+            catch (Exception ex)
             {
-                DateTime horaInicio;
-                DateTime horaFin;
-
-                if (DateTime.TryParseExact(turnDto.horaInicio, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horaInicio) &&
-                    DateTime.TryParseExact(turnDto.horaFin, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out horaFin))
-                {
-                    var newTurno = new Turno(horaInicio, horaFin, turnDto.descripcion);
-                    var response = await _repositorio.AgregarAsync(newTurno);
-                    return Created("", newTurno);
-                }
-                else
-                {
-                    return BadRequest();
-                }
-                //Cambiar por servicios con mapper
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteLine(int id)
         {
-            await _repositorio.DeleteAsync(id);
-
-            return Accepted(new { Id = id });
+            try
+            {
+                await _turnService.EliminarTurno(id);
+                return Accepted(new { Id = id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         #endregion
     }
 }
-public record TurnoDto(string horaInicio, string horaFin, string descripcion);

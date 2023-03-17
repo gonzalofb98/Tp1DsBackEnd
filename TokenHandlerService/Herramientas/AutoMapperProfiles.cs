@@ -16,6 +16,10 @@ namespace Services.Herramientas
             CreateMap<LineaDeTrabajoDto, LineaDeTrabajo>();
             CreateMap<Defecto, DefectoDto>();
             CreateMap<DefectoDto, Defecto>();
+            CreateMap<TurnoDto, Turno>();
+            CreateMap<Turno, TurnoDto>();
+            CreateMap<Incidencia, IncidenciaDto>();
+            CreateMap<IncidenciaDto, Incidencia>();
         }
     }
 }

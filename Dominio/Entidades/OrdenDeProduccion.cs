@@ -27,9 +27,8 @@ namespace Dominio.Entidades
         public Usuario? SupervisorDeCalidad { get; set; }
 
         private List<JornadaLaboral?> _jornadas = new List<JornadaLaboral?>();
-        public List<JornadaLaboral?> Jornadas { get { return _jornadas; } }
+        public List<JornadaLaboral?> Jornadas { get { return _jornadas; }  set { _jornadas = value; } }
 
-        //CAMBIAR ESTO
         public List<Alerta>? Alertas { get; set; }
         #endregion
 
@@ -38,7 +37,7 @@ namespace Dominio.Entidades
 
         }
         public OrdenDeProduccion(string numero, Modelo modelo,
-            Color color, LineaDeTrabajo linea, Usuario supervisorLinea)
+            Color color, LineaDeTrabajo linea, Usuario supervisorLinea, Turno turno)
         {
             Numero = numero;
             Modelo = modelo;
@@ -47,16 +46,17 @@ namespace Dominio.Entidades
             SupervisorDeLinea = supervisorLinea;
             Estado = EstadoOp.ACTIVA;
             FechaInicio = DateTime.Now;
+            EstablecerNuevaJornada(turno);
         }
 
-        public void EstablecerNuevaJornada(DateTime horaInicio, Turno turno)
+        public void EstablecerNuevaJornada(Turno turno)
         {
-            _jornadas.Add(new JornadaLaboral(horaInicio, turno));
+            _jornadas.Add(new JornadaLaboral(turno));
         }
 
         public JornadaLaboral? GetJornadaActual()
         {
-            return _jornadas.FirstOrDefault();
+            return _jornadas.Last();
         }
 
         public void FinalizarOrden()
@@ -65,8 +65,10 @@ namespace Dominio.Entidades
         }
         public void PausarReanudarOrden()
         {
-            if (Estado == EstadoOp.PAUSADA) Estado = EstadoOp.ACTIVA;
-            else Estado = EstadoOp.PAUSADA;
+            if (Estado == EstadoOp.PAUSADA) 
+                Estado = EstadoOp.ACTIVA;
+            else 
+                Estado = EstadoOp.PAUSADA;
         }
     }
     public enum EstadoOp

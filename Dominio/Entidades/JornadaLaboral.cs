@@ -11,10 +11,10 @@ namespace Dominio.Entidades
     {
         #region Propiedades
         [Required]
-        public DateTime HoraInicio { get; set; }
+        public DateTime FechaInicio { get; set; }
 
         [Required]
-        public DateTime HoraFin { get; set; }
+        public DateTime FechaFin { get; set; }
         public List<Incidencia> Incidencias { get; set; } = new List<Incidencia>();
         public Turno Turno { get; set; }
         #endregion
@@ -24,21 +24,21 @@ namespace Dominio.Entidades
 
         }
 
-        public JornadaLaboral(DateTime fechaInicio, Turno turno)
+        public JornadaLaboral(Turno turno)
         {
-            HoraInicio = fechaInicio;
+            FechaInicio = DateTime.Now;
             Turno = turno;
         }
         public JornadaLaboral(DateTime fechaInicio, DateTime fechaFin, Turno turno)
         {
-            HoraInicio = fechaInicio;
-            HoraFin = fechaFin;
+            FechaInicio = fechaInicio;
+            FechaFin = fechaFin;
             Turno = turno;
         }
 
-        public void AgregarIncidencia(DateTime fecha, Pie? pie = null, Defecto? defecto = null)
+        public void AgregarIncidencia(Incidencia incidencia)
         {
-            Incidencias.Add(new Incidencia(fecha, pie, defecto));
+            Incidencias.Add(incidencia);
         }
     }
 }

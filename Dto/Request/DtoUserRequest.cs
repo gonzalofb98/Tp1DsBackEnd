@@ -19,12 +19,5 @@ namespace Dto.Request
 
         [EmailAddress]
         public string Email { get; set; }
-
-        public DateTime BirthDate { get; set; }
-
-        public DtoUserRequest()
-        {
-            BirthDate = DateTime.Today.AddYears(-20);
-        }
     }
 }

@@ -97,7 +97,7 @@ namespace Datos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DefectoId")
+                    b.Property<int>("DefectoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
@@ -138,18 +138,12 @@ namespace Datos.Migrations
                     b.Property<int?>("OrdenDeProduccionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SupervisorDeCalidadId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("TurnoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrdenDeProduccionId");
-
-                    b.HasIndex("SupervisorDeCalidadId");
 
                     b.HasIndex("TurnoId");
 
@@ -238,7 +232,6 @@ namespace Datos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupervisorDeCalidadId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SupervisorDeLineaId")
@@ -507,7 +500,9 @@ namespace Datos.Migrations
                 {
                     b.HasOne("Dominio.Entidades.Defecto", "Defecto")
                         .WithMany()
-                        .HasForeignKey("DefectoId");
+                        .HasForeignKey("DefectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Dominio.Entidades.JornadaLaboral", "Jornada")
                         .WithMany("Incidencias")
@@ -526,19 +521,11 @@ namespace Datos.Migrations
                         .WithMany("Jornadas")
                         .HasForeignKey("OrdenDeProduccionId");
 
-                    b.HasOne("Dominio.Entidades.Usuario", "SupervisorDeCalidad")
-                        .WithMany()
-                        .HasForeignKey("SupervisorDeCalidadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Dominio.Entidades.Turno", "Turno")
-                        .WithMany("Jornadas")
+                        .WithMany()
                         .HasForeignKey("TurnoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("SupervisorDeCalidad");
 
                     b.Navigation("Turno");
                 });
@@ -563,9 +550,7 @@ namespace Datos.Migrations
 
                     b.HasOne("Dominio.Entidades.Usuario", "SupervisorDeCalidad")
                         .WithMany()
-                        .HasForeignKey("SupervisorDeCalidadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupervisorDeCalidadId");
 
                     b.HasOne("Dominio.Entidades.Usuario", "SupervisorDeLinea")
                         .WithMany()
@@ -644,11 +629,6 @@ namespace Datos.Migrations
                 {
                     b.Navigation("Alertas");
 
-                    b.Navigation("Jornadas");
-                });
-
-            modelBuilder.Entity("Dominio.Entidades.Turno", b =>
-                {
                     b.Navigation("Jornadas");
                 });
 #pragma warning restore 612, 618

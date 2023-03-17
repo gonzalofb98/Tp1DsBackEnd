@@ -8,6 +8,8 @@ using System.Text.Json;
 using Datos.Migrations;
 using System.Collections.Generic;
 using Services.Herramientas;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace TP1.Controladores
 {
@@ -55,6 +57,8 @@ namespace TP1.Controladores
         }
         
 
+        
+
         [HttpGet("ByUsuario")]
         public async Task<IActionResult> GetOpByUsuario(string email)
         {
@@ -64,6 +68,9 @@ namespace TP1.Controladores
                     .ListAsync(x => x.SupervisorDeLinea.Email == email, 
                     "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                var jornadas = Utils.SPGetJornadas(op.Id);
+                if (jornadas != null) op.Jornadas = jornadas;
+
                 if (op != null)
                     return Ok(op);
                 else return Ok("Usuario no encontrado");
@@ -73,6 +80,7 @@ namespace TP1.Controladores
                 return BadRequest(e);
             }
         }
+
         [HttpGet("ByUsuarioCalidad")]
         public async Task<IActionResult> GetOpByUsuarioCalidad(string email)
         {
@@ -119,7 +127,12 @@ namespace TP1.Controladores
                 .ListAsync(x => x.SupervisorDeLinea.Email == email, 
                 "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
-                opExistente.PausarReanudarOrden();
+            var turnos = (await _repositorioTurno.GetTodosAsync()).ToList();
+            if (Utils.JornadaPerteneceAlTurnoActual(turnos, opExistente.Jornadas[opExistente.Jornadas.Count - 1]))
+                opExistente.EstablecerNuevaJornada(Utils.GetTurnoActual(turnos));
+            //tira exepcion si esta fuera del turno
+
+            opExistente.PausarReanudarOrden();
 
             await _repositorio.UpdateAsync(opExistente);
 
@@ -202,11 +215,9 @@ namespace TP1.Controladores
                     var usuario = await _userManager.FindByEmailAsync(opDto.email);
                     if (usuario == null) return BadRequest("El usuario no existe");
 
-                    var newOp = new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario);
-
-                    var turnoActual = Utils.GetTurnoActual((await _repositorioTurno.GetTodosAsync()).ToList());
-
-                    newOp.EstablecerNuevaJornada(DateTime.Now, turnoActual);
+                    var turnos = (await _repositorioTurno.GetTodosAsync()).ToList();
+                    var turnoActual = Utils.GetTurnoActual(turnos);
+                    var newOp = new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario, turnoActual);
 
                     await _repositorio.AgregarAsync(newOp);
 
