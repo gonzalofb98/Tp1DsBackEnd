@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using Services.Herramientas;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dto;
+using Services.Interfaces;
 
 namespace TP1.Controladores
 {
@@ -23,8 +25,10 @@ namespace TP1.Controladores
         private readonly IRepositorioGenerico<Turno> _repositorioTurno;
         private readonly IRepositorioGenerico<LineaDeTrabajo> _repositorioLinea;
         private readonly UserManager<Usuario> _userManager;
+        private readonly IOrdenService _ordenService;
 
         public ControladorOrdenDeProduccion(
+            IOrdenService ordenService,
             IRepositorioGenerico<OrdenDeProduccion> repositorio,
             IRepositorioGenerico<Modelo> repositorioModelo,
             IRepositorioGenerico<Color> repositorioColor,
@@ -33,6 +37,7 @@ namespace TP1.Controladores
             UserManager<Usuario> userManager
             )
         {
+            _ordenService = ordenService;
             this._repositorio = repositorio;
             this._repositorioLinea= repositorioLinea;
             this._repositorioModelo = repositorioModelo;
@@ -50,14 +55,6 @@ namespace TP1.Controladores
             return Ok(ops);
         }
 
-        [HttpGet("ById")]
-        public async Task<IActionResult> GetOpById(int id)
-        {
-            return Ok(await _repositorio.GetAsync(id));
-        }
-        
-
-        
 
         [HttpGet("ByUsuario")]
         public async Task<IActionResult> GetOpByUsuario(string email)
@@ -68,11 +65,12 @@ namespace TP1.Controladores
                     .ListAsync(x => x.SupervisorDeLinea.Email == email, 
                     "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
-                var jornadas = Utils.SPGetJornadas(op.Id);
-                if (jornadas != null) op.Jornadas = jornadas;
-
                 if (op != null)
+                {
+                    var jornadas = Utils.SPGetJornadas(op.Id);
+                    if (jornadas != null) op.Jornadas = jornadas;
                     return Ok(op);
+                }
                 else return Ok("Usuario no encontrado");
             }
             catch (Exception e)
@@ -91,7 +89,11 @@ namespace TP1.Controladores
                     "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
                 if (op != null)
+                {
+                    var jornadas = Utils.SPGetJornadas(op.Id);
+                    if (jornadas != null) op.Jornadas = jornadas;
                     return Ok(op);
+                }
                 else return Ok("Usuario no encontrado");
             }
             catch (Exception e)
@@ -109,6 +111,11 @@ namespace TP1.Controladores
                     .ListAsync(x => x.Linea.Id == lineaId, 
                     "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+                if(op != null)
+                {
+                    var jornadas = Utils.SPGetJornadas(op.Id);
+                    if (jornadas != null) op.Jornadas = jornadas;
+                }
                 return Ok(op);
             }
             catch (Exception e)
@@ -127,6 +134,8 @@ namespace TP1.Controladores
                 .ListAsync(x => x.SupervisorDeLinea.Email == email, 
                 "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .Where(e => e.Estado != EstadoOp.FINALIZADA).FirstOrDefault();
+            var jornadas = Utils.SPGetJornadas(opExistente.Id);
+            if (jornadas != null) opExistente.Jornadas = jornadas;
             var turnos = (await _repositorioTurno.GetTodosAsync()).ToList();
             if (Utils.JornadaPerteneceAlTurnoActual(turnos, opExistente.Jornadas[opExistente.Jornadas.Count - 1]))
                 opExistente.EstablecerNuevaJornada(Utils.GetTurnoActual(turnos));
@@ -172,6 +181,8 @@ namespace TP1.Controladores
                 .ListAsync(x => ((x.Estado != EstadoOp.FINALIZADA) && (x.SupervisorDeLinea.Email == email)), 
                 "Modelo", "Color", "Linea", "SupervisorDeLinea", "SupervisorDeCalidad"))
                 .FirstOrDefault();
+            var jornadas = Utils.SPGetJornadas(opExistente.Id);
+            if (jornadas != null) opExistente.Jornadas = jornadas;
             if (opExistente != null || opExistente.Estado != EstadoOp.FINALIZADA)
             {
                 opExistente.Estado = EstadoOp.FINALIZADA;
@@ -189,45 +200,15 @@ namespace TP1.Controladores
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> SaveOp([FromBody] OrdenDto opDto)
+        public async Task<IActionResult> SaveOp([FromBody] OrdenDeProduccionDto opDto)
         {
-            if (opDto.nroOp == "") return BadRequest("No se ingreso el numero de OP");
-            var opExistente = (await _repositorio.ListAsync(x => x.Numero == opDto.nroOp)).FirstOrDefault();
-            if (opExistente != null)
+            try
             {
-                return BadRequest("El Numero de OP ya existe");
-            }
-            else
+                var op = await _ordenService.CrearOrden(opDto);
+                return Created("",op);
+            }catch(Exception ex)
             {
-                try
-                {
-                    //Cambiar por servicios con mapper
-                    var modelo = await _repositorioModelo.GetAsync(opDto.modeloId);
-                    if (modelo == null) return BadRequest("El modelo no existe");
-
-                    var color = await _repositorioColor.GetAsync(opDto.colorId);
-                    if (color == null) return BadRequest("El color no existe");
-
-                    var linea = await _repositorioLinea.GetAsync(opDto.lineaId);
-                    if (linea == null) return BadRequest("La línea no existe");
-                    linea.Estado = EstadoLinea.OCUPADA;
-
-                    var usuario = await _userManager.FindByEmailAsync(opDto.email);
-                    if (usuario == null) return BadRequest("El usuario no existe");
-
-                    var turnos = (await _repositorioTurno.GetTodosAsync()).ToList();
-                    var turnoActual = Utils.GetTurnoActual(turnos);
-                    var newOp = new OrdenDeProduccion(opDto.nroOp, modelo, color, linea, usuario, turnoActual);
-
-                    await _repositorio.AgregarAsync(newOp);
-
-                    return Created("", "Created");
-                }
-                catch
-                {
-                    return BadRequest("Error al crear la OP");
-                }
-
+                return BadRequest(ex.Message);
             }
         }
 

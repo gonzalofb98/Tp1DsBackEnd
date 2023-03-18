@@ -28,6 +28,7 @@ builder.Services.AddTransient<IModelService, ModelService>();
 builder.Services.AddTransient<IColorService, ColorService>();
 builder.Services.AddTransient<IDefectService, DefectService>();
 builder.Services.AddTransient<ITurnService, TurnService>();
+builder.Services.AddTransient<IOrdenService, OrdenService>();
 builder.Services.AddTransient<IIncidenciaService, IncidenciaService>();
 
 //cors
