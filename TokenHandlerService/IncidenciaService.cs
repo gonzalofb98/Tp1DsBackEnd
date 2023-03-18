@@ -46,19 +46,10 @@ namespace Services
             if (opActual == null)
                 throw new ArgumentException("El numero de OP ingresado es incorrecto");
 
-            if (incidenciaDto.Defecto.Equals(""))
-                throw new ArgumentException("No se específico el defecto");
-
             var defecto = (await _repositorioDefecto.GetConFiltro(x=> x.Descripcion == incidenciaDto.Defecto)).LastOrDefault();
-
-            if (defecto == null)
-                throw new ArgumentException("Defecto no encontrado");
 
             if ( incidenciaDto.Pie < (Pie) 0 ||  incidenciaDto.Pie > (Pie) 1)
                 throw new ArgumentException("No se específico en que pie se encontro el defecto");
-
-            if ( incidenciaDto.Tipo < (TipoIncidencia) 0 ||  incidenciaDto.Tipo > (TipoIncidencia) 1)
-                throw new ArgumentException("No se específico el tipo de incidencia");
 
             var incidencia = new Incidencia(incidenciaDto.Pie, defecto);
 
@@ -72,17 +63,17 @@ namespace Services
 
         }
 
-        public Task EliminarIncidencia(int id)
+        public async Task EliminarIncidencia(int id)
         {
-            throw new NotImplementedException();
+            var incidencia = await _repositorioIncidencias.GetAsync(id);
+
+            if (incidencia == null)
+                throw new ArgumentException("No se encontró la incidiencia con el Id: " + id);
+
+            await _repositorioIncidencias.DeleteAsync(id);
         }
 
         public Task<List<Incidencia>> GetByDefecto(string defecto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> ModificarIncidencia(int id, IncidenciaDto incidenciaDto)
         {
             throw new NotImplementedException();
         }

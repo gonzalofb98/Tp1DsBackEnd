@@ -11,6 +11,5 @@ namespace Dto
     {
         public string Defecto { get; set; }
         public Pie Pie { get; set; }
-        public TipoIncidencia Tipo { get; set; }
     }
 }

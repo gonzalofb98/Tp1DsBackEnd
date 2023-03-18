@@ -36,7 +36,7 @@ namespace TP1.Controladores
         {
             try
             {
-                List<Incidencia> incidencias = await _incidenciaService.GetByDefecto(defecto);
+                List<Incidencia> incidencias = await _incidenciaService.ListAsync(x => x.Defecto.Descripcion == defecto,"Defecto");
                 return Ok(incidencias);
             }
             catch(Exception ex) 
@@ -47,22 +47,6 @@ namespace TP1.Controladores
         #endregion
 
         #region Metodos Put, Post y Delete
-        //[HttpPut("{id:int}")]
-        //public async Task<IActionResult> UpdateModel(int id, [FromBody] IncidenciaDto incidenciaDto)
-        //{
-        //    try
-        //    {
-        //        var response = await _incidenciaService.ModificarIncidencia(id, incidenciaDto);
-        //        return Accepted(new
-        //        {
-        //            Id = response
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
         [HttpPost("Create")]
         public async Task<IActionResult> SaveIncidencia(string nroOp, [FromBody] IncidenciaDto incidenciaDto)
@@ -78,19 +62,19 @@ namespace TP1.Controladores
             }
         }
 
-        //[HttpDelete("Delete")]
-        //public async Task<IActionResult> DeleteModelBySku(int id)
-        //{
-        //    try
-        //    {
-        //        await _incidenciaService.EliminarModelo(id);
-        //        return Accepted(new { Id = id });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteIncidencia(int id)
+        {
+            try
+            {
+                await _incidenciaService.EliminarIncidencia(id);
+                return Accepted(new { Id = id });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
     }
 }

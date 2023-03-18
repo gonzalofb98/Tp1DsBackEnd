@@ -15,7 +15,7 @@ namespace Dominio.Entidades
         #endregion
 
         #region Relaciones
-        public Defecto Defecto { get; set; }
+        public Defecto? Defecto { get; set; }
         public Pie? Pie { get; set; }
         public TipoIncidencia Tipo { get; set; } = TipoIncidencia.PRIMERA;
         public JornadaLaboral Jornada { get; set; }
@@ -29,8 +29,11 @@ namespace Dominio.Entidades
         public Incidencia(Pie pie, Defecto defecto)
         {
             Fecha = DateTime.Now;
-            if (defecto != null) Tipo = TipoIncidencia.DEFECTO;
-            Defecto = defecto;
+            if (defecto != null) 
+            {
+                Tipo = TipoIncidencia.DEFECTO;
+                Defecto = defecto;
+            }
             Pie = pie;
         }
     }

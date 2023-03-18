@@ -97,7 +97,7 @@ namespace Datos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DefectoId")
+                    b.Property<int?>("DefectoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
@@ -500,9 +500,7 @@ namespace Datos.Migrations
                 {
                     b.HasOne("Dominio.Entidades.Defecto", "Defecto")
                         .WithMany()
-                        .HasForeignKey("DefectoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DefectoId");
 
                     b.HasOne("Dominio.Entidades.JornadaLaboral", "Jornada")
                         .WithMany("Incidencias")
